@@ -1,16 +1,23 @@
-function intcodeComputer(program) {
-  let index = 0;
-  let opcode = program[index];
-  let operand1, operand2;
+function intcodeComputer(memory) {
+  let instructionPointer = 0;
+  let opcode = memory[instructionPointer];
+  let parameter1Address, parameter2Address, destinationAddress;
+  let parameter1, parameter2;
   while (opcode !== 99) {
-    operand1 = program[program[index + 1]];
-    operand2 = program[program[index + 2]];
-    program[program[index + 3]] =
-      opcode === 1 ? operand1 + operand2 : operand1 * operand2;
-    index += 4;
-    opcode = program[index];
+    parameter1Address = memory[instructionPointer + 1];
+    parameter2Address = memory[instructionPointer + 2];
+    destinationAddress = memory[instructionPointer + 3];
+
+    parameter1 = memory[parameter1Address];
+    parameter2 = memory[parameter2Address];
+    memory[destinationAddress] =
+      opcode === 1 ? parameter1 + parameter2 : parameter1 * parameter2;
+
+    instructionPointer += 4;
+    opcode = memory[instructionPointer];
   }
-  return program;
+
+  return memory;
 }
 
 module.exports = { intcodeComputer };
