@@ -1,3 +1,4 @@
+const { runTestCases } = require("../utils/runTestCases");
 const { calculateFuel, calculateFuelRecursive } = require("./calculateFuel");
 
 runTestCases(calculateFuel, [
@@ -14,23 +15,3 @@ runTestCases(calculateFuelRecursive, [
   { input: 100756, expectedOutput: 50346 },
   { input: 0, expectedOutput: 0 }
 ]);
-
-function runTestCases(method, testCases) {
-  console.log(`Testing ${method.name}...`);
-  let passed = 0;
-
-  testCases.forEach(({ input, expectedOutput }) => {
-    const output = method(input);
-    if (output !== expectedOutput) {
-      console.error(
-        `Expected ${expectedOutput} for input ${input}, got ${output}`
-      );
-    } else {
-      passed++;
-    }
-  });
-
-  console.log(
-    `Passed ${passed}/${testCases.length} ${method.name} test cases.`
-  );
-}

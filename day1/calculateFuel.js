@@ -4,7 +4,7 @@ function calculateFuel(mass) {
 
 function calculateFuelRecursive(mass) {
   const fuelRequired = calculateFuel(mass);
-  if (fuelRequired === 0) return fuelRequired;
+  if (fuelRequired <= 0) return fuelRequired;
   return fuelRequired + calculateFuelRecursive(fuelRequired);
 }
 
