@@ -10,5 +10,5 @@ function calculateFuelRecursive(mass) {
 
 module.exports = {
   calculateFuel,
-  calculateFuelRecursive
+  calculateFuelRecursive,
 };

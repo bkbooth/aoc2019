@@ -1,4 +1,4 @@
-const assert = require("assert").strict;
+const assert = require('assert').strict;
 
 function runTestCases(label, runner, testCases) {
   console.log(`Testing ${label}...`);
@@ -11,9 +11,7 @@ function runTestCases(label, runner, testCases) {
       passed++;
     } catch (_error) {
       console.error(
-        `Expected ${format(expectedOutput)}, got ${format(
-          output
-        )}, for input ${format(input)}`
+        `Expected ${format(expectedOutput)}, got ${format(output)}, for input ${format(input)}`
       );
     }
   });
@@ -23,13 +21,13 @@ function runTestCases(label, runner, testCases) {
 
 function format(value) {
   if (Array.isArray(value)) {
-    return `[${value.map(format).join(",")}]`;
+    return `[${value.map(format).join(',')}]`;
   }
-  if (value != null && typeof value === "object") {
+  if (value != null && typeof value === 'object') {
     return `{ ${Object.keys(value)
       .filter(key => value.hasOwnProperty(key))
       .map(key => `${key}: ${format(value[key])}`)
-      .join(", ")} }`;
+      .join(', ')} }`;
   }
   return value;
 }

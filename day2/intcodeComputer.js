@@ -10,8 +10,7 @@ function intcodeComputer(memory) {
 
     parameter1 = memory[parameter1Address];
     parameter2 = memory[parameter2Address];
-    memory[destinationAddress] =
-      opcode === 1 ? parameter1 + parameter2 : parameter1 * parameter2;
+    memory[destinationAddress] = opcode === 1 ? parameter1 + parameter2 : parameter1 * parameter2;
 
     instructionPointer += 4;
     opcode = memory[instructionPointer];

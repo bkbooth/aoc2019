@@ -12,7 +12,7 @@ function intersectingDistanceByClosest(path1, path2) {
     }
   }
 
-  throw new Error("Paths do not intersect");
+  throw new Error('Paths do not intersect');
 }
 
 function intersectingDistanceBySteps(path1, path2) {
@@ -31,14 +31,14 @@ function intersectingDistanceBySteps(path1, path2) {
   }
 
   if (!Number.isFinite(fewestSteps)) {
-    throw new Error("Paths do not intersect");
+    throw new Error('Paths do not intersect');
   }
   return fewestSteps;
 }
 
 function parseCommand(command) {
-  let [direction, ...distance] = command.split("");
-  distance = Number(distance.join(""));
+  let [direction, ...distance] = command.split('');
+  distance = Number(distance.join(''));
   return { direction, distance };
 }
 
@@ -49,13 +49,13 @@ function pointsOnPath(path) {
     let newPoints = [];
     for (let step = 0; step < distance; step++) {
       ++steps;
-      if (direction === "U") {
+      if (direction === 'U') {
         newPoints.push([x, ++y, steps]);
-      } else if (direction === "R") {
+      } else if (direction === 'R') {
         newPoints.push([++x, y, steps]);
-      } else if (direction === "D") {
+      } else if (direction === 'D') {
         newPoints.push([x, --y, steps]);
-      } else if (direction === "L") {
+      } else if (direction === 'L') {
         newPoints.push([--x, y, steps]);
       }
     }
@@ -73,5 +73,5 @@ module.exports = {
   intersectingDistanceByClosest,
   intersectingDistanceBySteps,
   parseCommand,
-  pointsOnPath
+  pointsOnPath,
 };
