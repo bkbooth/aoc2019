@@ -28,11 +28,35 @@ function intcodeComputer(initialMemory, ...inputs) {
       const valueAddress = memory[instructionPointer + 1];
       const value = paramModes[0] === 1 ? valueAddress : memory[valueAddress];
       console.log('OUTPUT:', value);
+    } else if (opcode === 5) {
+      // jump-if-true
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      if (param1 !== 0) instructionPointer = param2;
+      else instructionPointer += params + 1;
+    } else if (opcode === 6) {
+      // jump-if-false
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      if (param1 === 0) instructionPointer = param2;
+      else instructionPointer += params + 1;
+    } else if (opcode === 7) {
+      // less than
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const destinationAddress = memory[instructionPointer + 3];
+      memory[destinationAddress] = param1 < param2 ? 1 : 0;
+    } else if (opcode === 8) {
+      // equals
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const destinationAddress = memory[instructionPointer + 3];
+      memory[destinationAddress] = param1 === param2 ? 1 : 0;
     } else {
       throw new Error(`Unknown upcode ${opcode}`);
     }
 
-    instructionPointer += params + 1;
+    if (opcode !== 5 && opcode !== 6) instructionPointer += params + 1;
     ({ opcode, params, paramModes } = parseInstruction(memory[instructionPointer]));
   }
 
@@ -45,6 +69,10 @@ const OPCODE_PARAMS = {
   2: 3,
   3: 1,
   4: 1,
+  5: 2,
+  6: 2,
+  7: 3,
+  8: 3,
 };
 
 function parseInstruction(instruction) {
