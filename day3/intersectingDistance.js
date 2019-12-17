@@ -2,4 +2,13 @@ function intersectingDistance(path1, path2) {
   return 1;
 }
 
-module.exports = { intersectingDistance };
+function parseCommand(command) {
+  let [direction, ...distance] = command.split("");
+  distance = Number(distance.join(""));
+  return { direction, distance };
+}
+
+module.exports = {
+  intersectingDistance,
+  parseCommand
+};

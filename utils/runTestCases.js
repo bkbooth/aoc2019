@@ -25,6 +25,12 @@ function format(value) {
   if (Array.isArray(value)) {
     return `[${value.map(format).join(",")}]`;
   }
+  if (value != null && typeof value === "object") {
+    return `{ ${Object.keys(value)
+      .filter(key => value.hasOwnProperty(key))
+      .map(key => `${key}: ${format(value[key])}`)
+      .join(", ")} }`;
+  }
   return value;
 }
 

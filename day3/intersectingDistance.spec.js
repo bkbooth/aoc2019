@@ -1,5 +1,47 @@
 const { runTestCases } = require("../utils/runTestCases");
-const { intersectingDistance } = require("./intersectingDistance");
+const {
+  intersectingDistance,
+  parseCommand
+} = require("./intersectingDistance");
+
+runTestCases("parseCommand", parseCommand, [
+  {
+    input: "R75",
+    expectedOutput: { direction: "R", distance: 75 }
+  },
+  {
+    input: "D30",
+    expectedOutput: { direction: "D", distance: 30 }
+  },
+  {
+    input: "R83",
+    expectedOutput: { direction: "R", distance: 83 }
+  },
+  {
+    input: "U83",
+    expectedOutput: { direction: "U", distance: 83 }
+  },
+  {
+    input: "L12",
+    expectedOutput: { direction: "L", distance: 12 }
+  },
+  {
+    input: "D49",
+    expectedOutput: { direction: "D", distance: 49 }
+  },
+  {
+    input: "R71",
+    expectedOutput: { direction: "R", distance: 71 }
+  },
+  {
+    input: "U7",
+    expectedOutput: { direction: "U", distance: 7 }
+  },
+  {
+    input: "L72",
+    expectedOutput: { direction: "L", distance: 72 }
+  }
+]);
 
 runTestCases(
   "intersectingDistance",
