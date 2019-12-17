@@ -1,7 +1,8 @@
 const assert = require('assert').strict;
+const { colourIt } = require('./colourIt');
 
 function runTestCases(label, runner, testCases) {
-  console.log(`Testing ${label}...`);
+  console.log(colourIt('blue', '»'), `Testing ${label}...`);
   let passed = 0;
 
   testCases.forEach(({ input, expectedOutput }) => {
@@ -11,12 +12,17 @@ function runTestCases(label, runner, testCases) {
       passed++;
     } catch (_error) {
       console.error(
+        colourIt('red', '✗'),
         `Expected ${format(expectedOutput)}, got ${format(output)}, for input ${format(input)}`
       );
     }
   });
 
-  console.log(`Passed ${passed}/${testCases.length} ${label} test cases.`);
+  const messages = [`of ${testCases.length} ${label} test cases.`];
+  if (passed !== 0) messages.unshift(colourIt('green', '✓'), `Passed ${passed}`);
+  const failed = testCases.length - passed;
+  if (failed) messages.unshift(colourIt('red', '✗'), `Failed ${failed}${passed ? ',' : ''}`);
+  console.log(...messages);
 }
 
 function format(value) {
