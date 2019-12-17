@@ -20,13 +20,14 @@ function intcodeComputer(initialMemory, ...inputs) {
     } else if (opcode === 3) {
       // input
       const input = inputs[inputPointer++];
+      console.log('INPUT:', input);
       const destinationAddress = memory[instructionPointer + 1];
       memory[destinationAddress] = input;
     } else if (opcode === 4) {
       // output
       const valueAddress = memory[instructionPointer + 1];
       const value = paramModes[0] === 1 ? valueAddress : memory[valueAddress];
-      console.log('Diagnostic code:', value);
+      console.log('OUTPUT:', value);
     } else {
       throw new Error(`Unknown upcode ${opcode}`);
     }
