@@ -1,7 +1,7 @@
 const { runTestCases } = require('../utils/runTestCases');
 const { validatePassword } = require('./validatePassword');
 
-runTestCases('validatePassword', validatePassword, [
+runTestCases('day4:validatePassword', validatePassword, [
   { input: '', expectedOutput: false },
   { input: '1234', expectedOutput: false },
   { input: '1234567', expectedOutput: false },

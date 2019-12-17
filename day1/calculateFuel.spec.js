@@ -1,7 +1,7 @@
 const { runTestCases } = require('../utils/runTestCases');
 const { calculateFuel, calculateFuelRecursive } = require('./calculateFuel');
 
-runTestCases('calculateFuel', calculateFuel, [
+runTestCases('day1:calculateFuel', calculateFuel, [
   { input: 12, expectedOutput: 2 },
   { input: 14, expectedOutput: 2 },
   { input: 1969, expectedOutput: 654 },
@@ -9,7 +9,7 @@ runTestCases('calculateFuel', calculateFuel, [
   { input: 0, expectedOutput: 0 },
 ]);
 
-runTestCases('calculateFuelRecursive', calculateFuelRecursive, [
+runTestCases('day1:calculateFuelRecursive', calculateFuelRecursive, [
   { input: 14, expectedOutput: 2 },
   { input: 1969, expectedOutput: 966 },
   { input: 100756, expectedOutput: 50346 },

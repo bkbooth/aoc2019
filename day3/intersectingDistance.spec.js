@@ -6,7 +6,7 @@ const {
   pointsOnPath,
 } = require('./intersectingDistance');
 
-runTestCases('parseCommand', parseCommand, [
+runTestCases('day3:parseCommand', parseCommand, [
   {
     input: 'R75',
     expectedOutput: { direction: 'R', distance: 75 },
@@ -45,7 +45,7 @@ runTestCases('parseCommand', parseCommand, [
   },
 ]);
 
-runTestCases('pointsOnPath', pointsOnPath, [
+runTestCases('day3:pointsOnPath', pointsOnPath, [
   {
     input: ['R8', 'U5', 'L5', 'D3'],
     expectedOutput: [
@@ -101,7 +101,7 @@ runTestCases('pointsOnPath', pointsOnPath, [
 ]);
 
 runTestCases(
-  'intersectingDistanceByClosest',
+  'day3:intersectingDistanceByClosest',
   ([input1, input2]) => intersectingDistanceByClosest(input1, input2),
   [
     {
@@ -129,7 +129,7 @@ runTestCases(
 );
 
 runTestCases(
-  'intersectingDistanceBySteps',
+  'day3:intersectingDistanceBySteps',
   ([input1, input2]) => intersectingDistanceBySteps(input1, input2),
   [
     {

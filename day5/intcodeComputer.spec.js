@@ -1,7 +1,7 @@
 const { runTestCases } = require('../utils/runTestCases');
 const { intcodeComputer, parseInstruction } = require('./intcodeComputer');
 
-runTestCases('parseInstruction', parseInstruction, [
+runTestCases('day5:parseInstruction', parseInstruction, [
   {
     input: 1,
     expectedOutput: {
@@ -60,7 +60,7 @@ runTestCases('parseInstruction', parseInstruction, [
   },
 ]);
 
-runTestCases('intcodeComputer', input => intcodeComputer(input, 1, 2, 3), [
+runTestCases('day5:intcodeComputer', input => intcodeComputer(input, 1, 2, 3), [
   { input: [1, 0, 0, 0, 99], expectedOutput: [2, 0, 0, 0, 99] },
   { input: [2, 3, 0, 3, 99], expectedOutput: [2, 3, 0, 6, 99] },
   { input: [2, 4, 4, 5, 99, 0], expectedOutput: [2, 4, 4, 5, 99, 9801] },
