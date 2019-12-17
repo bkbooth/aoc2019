@@ -16,20 +16,24 @@ function intersectingDistanceByClosest(path1, path2) {
 }
 
 function intersectingDistanceBySteps(path1, path2) {
-  const pointsOnPath1 = pointsOnPath(path1).sort(sortBySteps);
-  const pointsOnPath2 = pointsOnPath(path2).sort(sortBySteps);
+  const pointsOnPath1 = pointsOnPath(path1);
+  const pointsOnPath2 = pointsOnPath(path2);
 
+  let fewestSteps = Number.POSITIVE_INFINITY;
   for (let i = 0; i < pointsOnPath1.length; i++) {
     for (let j = 0; j < pointsOnPath2.length; j++) {
       const [x1, y1, steps1] = pointsOnPath1[i];
       const [x2, y2, steps2] = pointsOnPath2[j];
-      if (x1 === x2 && y1 === y2) {
-        return steps1 + steps2;
+      if (x1 === x2 && y1 === y2 && steps1 + steps2 < fewestSteps) {
+        fewestSteps = steps1 + steps2;
       }
     }
   }
 
-  throw new Error("Paths do not intersect");
+  if (!Number.isFinite(fewestSteps)) {
+    throw new Error("Paths do not intersect");
+  }
+  return fewestSteps;
 }
 
 function parseCommand(command) {
@@ -65,15 +69,9 @@ function sortByClosest([x1, y1], [x2, y2]) {
   return distance1 === distance2 ? 0 : distance1 < distance2 ? -1 : 1;
 }
 
-function sortBySteps([, , steps1], [, , steps2]) {
-  return steps1 === steps2 ? 0 : steps1 < steps2 ? -1 : 1;
-}
-
 module.exports = {
   intersectingDistanceByClosest,
   intersectingDistanceBySteps,
   parseCommand,
-  pointsOnPath,
-  sortByClosest,
-  sortBySteps
+  pointsOnPath
 };
