@@ -1,4 +1,4 @@
-function intersectingDistance(path1, path2) {
+function intersectingDistanceByClosest(path1, path2) {
   const pointsOnPath1 = pointsOnPath(path1).sort(sortByClosest);
   const pointsOnPath2 = pointsOnPath(path2).sort(sortByClosest);
 
@@ -15,6 +15,23 @@ function intersectingDistance(path1, path2) {
   throw new Error("Paths do not intersect");
 }
 
+function intersectingDistanceBySteps(path1, path2) {
+  const pointsOnPath1 = pointsOnPath(path1).sort(sortBySteps);
+  const pointsOnPath2 = pointsOnPath(path2).sort(sortBySteps);
+
+  for (let i = 0; i < pointsOnPath1.length; i++) {
+    for (let j = 0; j < pointsOnPath2.length; j++) {
+      const [x1, y1, steps1] = pointsOnPath1[i];
+      const [x2, y2, steps2] = pointsOnPath2[j];
+      if (x1 === x2 && y1 === y2) {
+        return steps1 + steps2;
+      }
+    }
+  }
+
+  throw new Error("Paths do not intersect");
+}
+
 function parseCommand(command) {
   let [direction, ...distance] = command.split("");
   distance = Number(distance.join(""));
@@ -24,20 +41,21 @@ function parseCommand(command) {
 function pointsOnPath(path) {
   return path.reduce((points, command) => {
     const { direction, distance } = parseCommand(command);
-    let [x, y] = points.length ? points[points.length - 1] : [0, 0];
-    let steps = [];
+    let [x, y, steps] = points.length ? points[points.length - 1] : [0, 0, 0];
+    let newPoints = [];
     for (let step = 0; step < distance; step++) {
+      ++steps;
       if (direction === "U") {
-        steps.push([x, ++y]);
+        newPoints.push([x, ++y, steps]);
       } else if (direction === "R") {
-        steps.push([++x, y]);
+        newPoints.push([++x, y, steps]);
       } else if (direction === "D") {
-        steps.push([x, --y]);
+        newPoints.push([x, --y, steps]);
       } else if (direction === "L") {
-        steps.push([--x, y]);
+        newPoints.push([--x, y, steps]);
       }
     }
-    return [...points, ...steps];
+    return [...points, ...newPoints];
   }, []);
 }
 
@@ -47,8 +65,15 @@ function sortByClosest([x1, y1], [x2, y2]) {
   return distance1 === distance2 ? 0 : distance1 < distance2 ? -1 : 1;
 }
 
+function sortBySteps([, , steps1], [, , steps2]) {
+  return steps1 === steps2 ? 0 : steps1 < steps2 ? -1 : 1;
+}
+
 module.exports = {
-  intersectingDistance,
+  intersectingDistanceByClosest,
+  intersectingDistanceBySteps,
   parseCommand,
-  pointsOnPath
+  pointsOnPath,
+  sortByClosest,
+  sortBySteps
 };
