@@ -1,5 +1,24 @@
 function intersectingDistance(path1, path2) {
-  return 1;
+  const pointsOnPath1 = pointsOnPath(path1);
+  const pointsOnPath2 = pointsOnPath(path2);
+  let closestIntersectingDistance = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < pointsOnPath1.length; i++) {
+    for (let j = 0; j < pointsOnPath2.length; j++) {
+      const [x1, y1] = pointsOnPath1[i];
+      const [x2, y2] = pointsOnPath2[j];
+      if (
+        x1 === x2 &&
+        y1 === y2 &&
+        Math.abs(x1) + Math.abs(y1) < closestIntersectingDistance
+      ) {
+        closestIntersectingDistance = Math.abs(x1) + Math.abs(y1);
+      }
+    }
+  }
+  if (!Number.isFinite(closestIntersectingDistance)) {
+    throw new Error("Paths do not intersect");
+  }
+  return closestIntersectingDistance;
 }
 
 function parseCommand(command) {
