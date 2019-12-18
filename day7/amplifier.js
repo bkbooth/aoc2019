@@ -12,4 +12,8 @@ function amplifier(program, ...phaseSettings) {
   return amplifierInput;
 }
 
-module.exports = { amplifier };
+function amplifierWithFeedback(program, ...phaseSettings) {
+  return 0;
+}
+
+module.exports = { amplifier, amplifierWithFeedback };
