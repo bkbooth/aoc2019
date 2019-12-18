@@ -1,21 +1,22 @@
 function intcodeComputer(initialMemory, ...inputs) {
   let memory = [...initialMemory];
   let instructionPointer = 0;
+  let relativeBase = 0;
   let inputPointer = 0;
-  let outputValue;
+  let outputs = [];
 
   let { opcode, params, paramModes } = parseInstruction(memory[instructionPointer]);
   while (opcode !== 99) {
     if (opcode === 1) {
       // add
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       const destinationAddress = memory[instructionPointer + 3];
       memory[destinationAddress] = param1 + param2;
     } else if (opcode === 2) {
       // multiply
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       const destinationAddress = memory[instructionPointer + 3];
       memory[destinationAddress] = param1 * param2;
     } else if (opcode === 3) {
@@ -25,32 +26,35 @@ function intcodeComputer(initialMemory, ...inputs) {
       memory[destinationAddress] = input;
     } else if (opcode === 4) {
       // output
-      const valueAddress = memory[instructionPointer + 1];
-      outputValue = paramModes[0] === 1 ? valueAddress : memory[valueAddress];
+      outputs.push(getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase));
     } else if (opcode === 5) {
       // jump-if-true
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       if (param1 !== 0) instructionPointer = param2;
       else instructionPointer += params + 1;
     } else if (opcode === 6) {
       // jump-if-false
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       if (param1 === 0) instructionPointer = param2;
       else instructionPointer += params + 1;
     } else if (opcode === 7) {
       // less than
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       const destinationAddress = memory[instructionPointer + 3];
       memory[destinationAddress] = param1 < param2 ? 1 : 0;
     } else if (opcode === 8) {
       // equals
-      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
-      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1]);
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      const param2 = getParam(memory, memory[instructionPointer + 2], paramModes[1], relativeBase);
       const destinationAddress = memory[instructionPointer + 3];
       memory[destinationAddress] = param1 === param2 ? 1 : 0;
+    } else if (opcode === 9) {
+      // adjust relative base
+      const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0], relativeBase);
+      relativeBase += param1;
     } else {
       throw new Error(`Unknown upcode ${opcode}`);
     }
@@ -59,7 +63,7 @@ function intcodeComputer(initialMemory, ...inputs) {
     ({ opcode, params, paramModes } = parseInstruction(memory[instructionPointer]));
   }
 
-  return outputValue;
+  return outputs.length === 1 ? outputs[0] : outputs;
 }
 
 const OPCODE_PARAMS = {
@@ -72,6 +76,7 @@ const OPCODE_PARAMS = {
   6: 2,
   7: 3,
   8: 3,
+  9: 1,
 };
 
 function parseInstruction(instruction) {
@@ -90,8 +95,14 @@ function parseInstruction(instruction) {
   return { opcode, params, paramModes };
 }
 
-function getParam(memory, address, paramMode) {
-  return paramMode === 1 ? address : memory[address];
+function getParam(memory, address, paramMode, relativeBase) {
+  return (
+    (paramMode === 1
+      ? address
+      : paramMode === 2
+      ? memory[relativeBase + address]
+      : memory[address]) || 0
+  );
 }
 
 module.exports = { intcodeComputer };
