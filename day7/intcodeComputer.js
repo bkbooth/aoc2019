@@ -2,6 +2,7 @@ function intcodeComputer(initialMemory, ...inputs) {
   let memory = [...initialMemory];
   let instructionPointer = 0;
   let inputPointer = 0;
+  let outputValue;
 
   let { opcode, params, paramModes } = parseInstruction(memory[instructionPointer]);
   while (opcode !== 99) {
@@ -20,14 +21,12 @@ function intcodeComputer(initialMemory, ...inputs) {
     } else if (opcode === 3) {
       // input
       const input = inputs[inputPointer++];
-      console.log('INPUT:', input);
       const destinationAddress = memory[instructionPointer + 1];
       memory[destinationAddress] = input;
     } else if (opcode === 4) {
       // output
       const valueAddress = memory[instructionPointer + 1];
-      const value = paramModes[0] === 1 ? valueAddress : memory[valueAddress];
-      console.log('OUTPUT:', value);
+      outputValue = paramModes[0] === 1 ? valueAddress : memory[valueAddress];
     } else if (opcode === 5) {
       // jump-if-true
       const param1 = getParam(memory, memory[instructionPointer + 1], paramModes[0]);
@@ -60,7 +59,7 @@ function intcodeComputer(initialMemory, ...inputs) {
     ({ opcode, params, paramModes } = parseInstruction(memory[instructionPointer]));
   }
 
-  return memory;
+  return outputValue;
 }
 
 const OPCODE_PARAMS = {
