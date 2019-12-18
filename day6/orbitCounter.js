@@ -9,4 +9,8 @@ function countIndirectOrbits(map, searchObject, orbits) {
   else return orbits;
 }
 
-module.exports = { orbitCounter };
+function minOrbitalTransfers(inputMap, from, to) {
+  return 0;
+}
+
+module.exports = { minOrbitalTransfers, orbitCounter };
