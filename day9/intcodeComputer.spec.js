@@ -8,4 +8,5 @@ runTestCases('day9:intcodeComputer', intcodeComputer, [
   },
   { input: [1102, 34915192, 34915192, 7, 4, 7, 99, 0], expectedOutput: 1219070632396864 },
   { input: [104, 1125899906842624, 99], expectedOutput: 1125899906842624 },
+  { input: [109, 13, 21102, 4, 4, -2, 109, -4, 204, 2, 99, -1], expectedOutput: 16 },
 ]);
