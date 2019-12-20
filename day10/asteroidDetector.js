@@ -39,18 +39,10 @@ function findAsteroids(starfield) {
 }
 
 function isInSameLine([sourcex, sourcey], [dest1x, dest1y], [dest2x, dest2y]) {
-  const diff1y = dest1y - sourcey;
-  const diff1x = dest1x - sourcex;
-  const angle1 = diff1y / diff1x;
-  const diff2y = dest2y - sourcey;
-  const diff2x = dest2x - sourcex;
-  const angle2 = diff2y / diff2x;
+  const angle1 = Math.atan2(sourcey - dest1y, sourcex - dest1x);
+  const angle2 = Math.atan2(sourcey - dest2y, sourcex - dest2x);
 
-  return (
-    angle1 === angle2 &&
-    Math.sign(diff1y) === Math.sign(diff2y) &&
-    Math.sign(diff1x) === Math.sign(diff2x)
-  );
+  return angle1 === angle2;
 }
 
 module.exports = { asteroidDetector, findAsteroids, isInSameLine };
