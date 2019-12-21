@@ -1,3 +1,5 @@
+const { getAngle } = require('./utils');
+
 const ASTEROID = '#';
 
 function asteroidDetector(starfield) {
@@ -38,11 +40,8 @@ function findAsteroids(starfield) {
   return asteroids;
 }
 
-function isInSameLine([sourcex, sourcey], [dest1x, dest1y], [dest2x, dest2y]) {
-  const angle1 = Math.atan2(sourcey - dest1y, sourcex - dest1x);
-  const angle2 = Math.atan2(sourcey - dest2y, sourcex - dest2x);
-
-  return angle1 === angle2;
+function isInSameLine(source, dest1, dest2) {
+  return getAngle(source, dest1) === getAngle(source, dest2);
 }
 
 module.exports = { asteroidDetector, findAsteroids, isInSameLine };
