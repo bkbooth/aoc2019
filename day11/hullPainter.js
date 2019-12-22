@@ -15,7 +15,7 @@ function hullPainter(program) {
   const computer = intcodeComputerGenerator(program);
   computer.next();
 
-  let visited = [];
+  let visited = [[0, 0, WHITE]];
   let position = [0, 0];
   let direction = 0;
   let hasHalted = false;
@@ -49,7 +49,7 @@ function hullPainter(program) {
     position[1] += DIRECTIONS[direction][1];
   }
 
-  return visited.length;
+  return visited;
 }
 
 module.exports = { hullPainter };
