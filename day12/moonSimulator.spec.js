@@ -1,5 +1,9 @@
 const { runTestCases } = require('../utils/runTestCases');
-const { moonSimulator, totalSystemEnergy } = require('./moonSimulator');
+const {
+  moonSimulatorBySteps,
+  moonSimulatorFindRepetition,
+  totalSystemEnergy,
+} = require('./moonSimulator');
 
 const MOON_POSITIONS = [
   [
@@ -16,7 +20,7 @@ const MOON_POSITIONS = [
   ],
 ];
 
-runTestCases('day12:moonSimulator', ([...inputs]) => moonSimulator(...inputs), [
+runTestCases('day12:moonSimulatorBySteps', ([...inputs]) => moonSimulatorBySteps(...inputs), [
   {
     input: [MOON_POSITIONS[0], 1],
     expectedOutput: [
@@ -70,6 +74,17 @@ runTestCases('day12:moonSimulator', ([...inputs]) => moonSimulator(...inputs), [
       { pos: { x: -29, y: -11, z: -1 }, vel: { x: -3, y: 7, z: 4 } },
       { pos: { x: 16, y: -13, z: 23 }, vel: { x: 7, y: 1, z: 1 } },
     ],
+  },
+]);
+
+runTestCases('day12:moonSimulatorFindRepetition', moonSimulatorFindRepetition, [
+  {
+    input: MOON_POSITIONS[0],
+    expectedOutput: 2772,
+  },
+  {
+    input: MOON_POSITIONS[1],
+    expectedOutput: 4686774924,
   },
 ]);
 
