@@ -1,4 +1,4 @@
-const lcm = require('./lcm');
+const { lcm } = require('./utils');
 
 function moonSimulatorBySteps(moonPositions, steps) {
   let moons = moonPositions.map(({ x, y, z }) => ({
