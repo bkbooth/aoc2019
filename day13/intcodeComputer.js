@@ -64,9 +64,9 @@ function* intcodeComputerGenerator(initialMemory, ...inputs) {
 
     if (opcode !== 5 && opcode !== 6) instructionPointer += params + 1;
     ({ opcode: nextOpcode, params, paramModes } = parseInstruction(memory[instructionPointer]));
-    if (outputs.length === 2 && nextOpcode !== 99) {
+    if (outputs.length === 3 && nextOpcode !== 99) {
       newInput = yield outputs;
-      inputs.push(newInput);
+      if (newInput !== undefined) inputs.push(newInput);
       outputs = [];
     }
     opcode = nextOpcode;
