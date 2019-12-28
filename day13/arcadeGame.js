@@ -7,22 +7,35 @@ const RENDER_TILE_ID = {
   3: '▬', // horizontal paddle
   4: '●', // ball
 };
+const SCREEN_ROWS = 22;
+const SCREEN_COLS = 37;
 
-async function arcadeGame(program) {
+async function arcadeGame(program, quarters = 1) {
+  program[0] = quarters;
+
   const computer = intcodeComputerGenerator(program);
   computer.next();
 
   let screen = [];
+  let score = 0;
   let hasHalted = false;
   while (!hasHalted) {
     const {
-      value: [x, y, tileId],
+      value: [x, y, data],
       done,
     } = computer.next();
-    if (done) hasHalted = true;
-    else screen = updateScreen(screen, { x, y, tileId });
+    if (done) {
+      hasHalted = true;
+    } else {
+      if (x === -1 && y === 0) score = data;
+      else screen = updateScreen(screen, { x, y, tileId: data });
+    }
+
+    if (screen.length === 22 && screen[SCREEN_ROWS - 1][SCREEN_COLS - 1] === 1) {
+      render(screen, score);
+      await wait();
+    }
   }
-  render(screen);
 }
 
 function updateScreen(lastScreen, { x, y, tileId }) {
@@ -45,19 +58,16 @@ function updateScreen(lastScreen, { x, y, tileId }) {
   });
 }
 
-function render(screen) {
-  let blockTiles = 0;
+function render(screen, score) {
+  console.log('\033c');
   for (let y = 0; y < screen.length; y++) {
-    console.log(
-      screen[y]
-        .map(tileId => {
-          if (tileId === 2) blockTiles++;
-          return RENDER_TILE_ID[tileId];
-        })
-        .join('')
-    );
+    console.log(screen[y].map(tileId => RENDER_TILE_ID[tileId]).join(''));
   }
-  console.log('Number of block tiles:', blockTiles);
+  console.log('Score:', score);
+}
+
+function wait(ms = 60) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 module.exports = { arcadeGame };
