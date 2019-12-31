@@ -24,7 +24,7 @@ function* intcodeComputerGenerator(initialMemory, ...inputs) {
       memory[destination] = param1 * param2;
     } else if (opcode === 3) {
       // input
-      const input = inputs[inputPointer++];
+      const input = inputs[inputPointer];
       const destination = getAddress(memory, instructionPointer + 1, paramModes[0], relativeBase);
       memory[destination] = input;
     } else if (opcode === 4) {
@@ -66,7 +66,7 @@ function* intcodeComputerGenerator(initialMemory, ...inputs) {
     ({ opcode: nextOpcode, params, paramModes } = parseInstruction(memory[instructionPointer]));
     if (outputs.length === 3 && nextOpcode !== 99) {
       newInput = yield outputs;
-      if (newInput !== undefined) inputs.push(newInput);
+      if (newInput !== undefined) inputs = [newInput];
       outputs = [];
     }
     opcode = nextOpcode;
