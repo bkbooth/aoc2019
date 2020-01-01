@@ -9,16 +9,11 @@ const RENDER_TILE_ID = {
   3: '▬', // horizontal paddle
   4: '●', // ball
 };
-const JOYSTICK = {
+const DIRECTION = {
   NEUTRAL: 0,
   LEFT: -1,
   RIGHT: 1,
 };
-
-const stdin = process.stdin;
-stdin.setRawMode(true);
-stdin.setEncoding('utf8');
-stdin.resume();
 
 async function arcadeGame(program, quarters = 1) {
   program[0] = quarters;
@@ -28,20 +23,11 @@ async function arcadeGame(program, quarters = 1) {
 
   let screen = [];
   let score = 0;
-  let joystick = JOYSTICK.NEUTRAL;
+  let ballPos = null;
+  let ballDir = DIRECTION.RIGHT;
+  let paddlePos = null;
+  let joystick = DIRECTION.NEUTRAL;
   let boardComplete = false;
-
-  stdin.on('data', key => {
-    if (key === '\u0003') {
-      process.exit();
-    } else if (key === '\u001B\u005B\u0044') {
-      joystick = JOYSTICK.LEFT;
-    } else if (key === '\u001B\u005B\u0043') {
-      joystick = JOYSTICK.RIGHT;
-    } else if (key === '\u001B\u005B\u0041' || key === '\u001B\u005B\u0042') {
-      joystick = JOYSTICK.NEUTRAL;
-    }
-  });
 
   let hasHalted = false;
   while (!hasHalted) {
@@ -52,9 +38,28 @@ async function arcadeGame(program, quarters = 1) {
     if (done) {
       hasHalted = true;
     } else {
-      joystick = JOYSTICK.NEUTRAL;
-      if (x === -1 && y === 0) score = data;
-      else screen = updateScreen(screen, { x, y, tileId: data });
+      if (x === -1 && y === 0) {
+        score = data;
+        continue;
+      } else {
+        if (data === 3) paddlePos = x;
+        if (data === 4) {
+          if (ballPos !== null) {
+            ballDir = x > ballPos ? DIRECTION.RIGHT : DIRECTION.LEFT;
+          }
+          ballPos = x;
+        }
+        if (ballPos !== null && paddlePos !== null) {
+          joystick =
+            ballPos === paddlePos
+              ? DIRECTION.NEUTRAL
+              : ballPos < paddlePos
+              ? DIRECTION.LEFT
+              : DIRECTION.RIGHT;
+        }
+
+        screen = updateScreen(screen, { x, y, tileId: data });
+      }
     }
 
     if (!boardComplete && screen.length === 22 && screen[SCREEN_ROWS - 1][SCREEN_COLS - 1] === 1) {
@@ -96,7 +101,7 @@ function render(screen, score) {
   console.log('Score:', score);
 }
 
-function wait(ms = 60) {
+function wait(ms = 5) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
