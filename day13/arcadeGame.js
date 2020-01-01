@@ -48,13 +48,17 @@ async function arcadeGame(program, quarters = 1) {
     const {
       value: [x, y, data],
       done,
-    } = computer.next(boardComplete ? joystick : undefined);
+    } = computer.next(joystick);
     if (done) {
       hasHalted = true;
     } else {
-      joystick = JOYSTICK.NEUTRAL;
-      if (x === -1 && y === 0) score = data;
-      else screen = updateScreen(screen, { x, y, tileId: data });
+      // joystick = JOYSTICK.NEUTRAL;
+      if (x === -1 && y === 0) {
+        score = data;
+        continue;
+      } else {
+        screen = updateScreen(screen, { x, y, tileId: data });
+      }
     }
 
     if (!boardComplete && screen.length === 22 && screen[SCREEN_ROWS - 1][SCREEN_COLS - 1] === 1) {
@@ -96,7 +100,7 @@ function render(screen, score) {
   console.log('Score:', score);
 }
 
-function wait(ms = 60) {
+function wait(ms = 100) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
